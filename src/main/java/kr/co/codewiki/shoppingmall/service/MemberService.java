@@ -3,13 +3,17 @@ package kr.co.codewiki.shoppingmall.service;
 import kr.co.codewiki.shoppingmall.entity.Member;
 import kr.co.codewiki.shoppingmall.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional // 롤백!
 @RequiredArgsConstructor // @AutoWired 없이 new 해주기
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
 
@@ -25,4 +29,19 @@ public class MemberService {
         }
     }
 
+    // 로그인 로그아웃 구현!
+    @Override  // loadUserByUsername 오버라이딩
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { // user 의 이메일을 전달받는다.(중복ㄴㄴ인애)
+        Member member = memberRepository.findByEmail(email);
+
+        if (member == null){
+            throw new UsernameNotFoundException(email);
+        }
+
+        return User.builder()
+                .username(member.getEmail())
+                .password(member.getPassword())
+                .roles(member.getRole().toString()) // enum 이니까 toString 해준다.
+                .build();
+    }
 }

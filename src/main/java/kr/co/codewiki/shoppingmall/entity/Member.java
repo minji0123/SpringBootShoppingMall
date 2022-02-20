@@ -40,7 +40,8 @@ public class Member {
                 .email(memberFormDto.getEmail())
                 .address(memberFormDto.getAddress())
                 .password( passwordEncoder.encode( memberFormDto.getPassword() ) ) // BCryptPasswordEncoder Bean 을 파라미터로 넘겨서 비번을 암호화함
-                .role(Role.USER)
+//                .role(Role.USER)
+                .role(Role.ADMIN)
                 .build();
         
         return member;

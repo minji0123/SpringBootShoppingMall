@@ -39,8 +39,8 @@ class MemberServiceTest {
     @DisplayName("회원가입 테스트")
     public void saveMemberTest(){
 
-        Member member = createMemberTest(); // dto -> entity
-        Member savedMember = memberService.saveMember(member);// 중복 가입 막는거 + 중복가입 아니면 save
+        Member member = createMemberTest(); // member: dto -> entity
+        Member savedMember = memberService.saveMember(member);// savedMember: 중복 가입 막는거 + 중복가입 아니면 save
 
 
         // 두개 같나 확인하기
@@ -55,8 +55,8 @@ class MemberServiceTest {
     @DisplayName("중복 회원 가입 테스트")
     public void saveDuplicateMemberTest(){
 
-        Member member1 = createMemberTest();// dto -> entity
-        memberService.saveMember(member1); // 중복 가입 막는거 + 중복가입 아니면 save
+        Member member1 = createMemberTest();// member1: dto -> entity
+        memberService.saveMember(member1); // member1: 중복 가입 막는거 + 중복가입 아니면 save
 
 
         Member member2 = createMemberTest(); // dto -> entity
