@@ -95,6 +95,13 @@
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
 
+		<!--  entity <-> dto 과정이 너무 복잡하고 귀찮아서 이 라이브러리를 사용함.(의존성 추가 해야 함) -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.3.9</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
