@@ -4,6 +4,7 @@ import kr.co.codewiki.shoppingmall.constant.ItemSellStatus;
 import kr.co.codewiki.shoppingmall.constant.OrderStatus;
 import kr.co.codewiki.shoppingmall.repository.ItemRepository;
 import kr.co.codewiki.shoppingmall.repository.MemberRepository;
+import kr.co.codewiki.shoppingmall.repository.OrderItemRepository;
 import kr.co.codewiki.shoppingmall.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,9 @@ class OrderTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
     public Item createItem(){
         Item item = new Item();
         item.setItemNm("테스트 상품");
@@ -64,7 +68,7 @@ class OrderTest {
             orderItem.setCount(10);
             orderItem.setOrderPrice(1000);
             orderItem.setOrder(order);
-            order.getOrderItems().add(orderItem);
+            order.getOrderItems().add(orderItem); // 영속성 컨텍스트에 저장되지 않은 oderitem 엔티티를 order 엔티티에 담아
         }
 
 
@@ -113,6 +117,23 @@ class OrderTest {
     public void orphanRemovalTest(){
         Order order = this.createOrder();
         order.getOrderItems().remove(0);
-        em.flush();
+        em.flush(); // 영속성 컨텍스트 -> db 반영
+    }
+
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest(){
+        Order order = this.createOrder();
+        Long orderItemId = order.getOrderItems().get(0).getId(); // 0 번째 인덱스 데이터 가져오기
+        em.flush(); // 영속성 컨텍스트 -> db 반영
+        em.clear();
+
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(EntityNotFoundException::new);
+        System.out.println("Order class : " + orderItem.getOrder().getClass());
+        System.out.println("===========================");
+        orderItem.getOrder().getOrderDate();
+        System.out.println("===========================");
     }
 }

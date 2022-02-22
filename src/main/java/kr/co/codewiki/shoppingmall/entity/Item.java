@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Item {
+public class Item extends BaseEntity{
 
     @Id
     @Column(name="item_id")
