@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,7 +39,7 @@ class ItemRepositoryTest {
                 .price(10000)
                 .itemDetail("테스트 상품 상세 설명")
                 .itemSellStatus(ItemSellStatus.SELL)
-                .stockNum(100)
+                .stockNumber(100)
                 .regTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now())
                 .build();
@@ -57,7 +55,7 @@ class ItemRepositoryTest {
                     .price(10000+i)
                     .itemDetail("테스트 상품 상세 설명"+i)
                     .itemSellStatus(ItemSellStatus.SELL)
-                    .stockNum(100)
+                    .stockNumber(100)
                     .regTime(LocalDateTime.now())
                     .updateTime(LocalDateTime.now())
                     .build();

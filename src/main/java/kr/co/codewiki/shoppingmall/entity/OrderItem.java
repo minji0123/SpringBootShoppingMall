@@ -8,12 +8,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="orders")
+//@Table(name="orders")
 @Getter @Setter
 public class OrderItem {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_item_id")
     private Long id;
 

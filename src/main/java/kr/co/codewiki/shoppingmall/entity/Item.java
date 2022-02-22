@@ -21,17 +21,21 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+//    @Column()
     @Column(nullable = false, length = 50)
     private String itemNm; // 상품명
 
+//    @Column(name="price")
     @Column(name="price", nullable = false)
     private int price;
 
+//    @Column
     @Column(nullable = false)
-    private int stockNum; // 재고수량
+    private int stockNumber; // 재고수량
 
     @Lob
     @Column(nullable = false)
+//    @Column
     private String itemDetail; // 상품 상세 설명
 
     @Enumerated(EnumType.STRING)
