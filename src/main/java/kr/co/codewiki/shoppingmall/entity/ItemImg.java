@@ -28,7 +28,7 @@ public class ItemImg extends BaseEntity{
     @JoinColumn(name = "item_id") // 상품 엔티티와 다대일 단방향 관계로 매핑
     private Item item;
 
-    public void updateItemImg(String oriImgName, String imgName, String imgUrl){ // 이거 세개만 받는거 뭐 쓰겠지??
+    public void updateItemImg(String oriImgName, String imgName, String imgUrl){ // 이거 세개만 받는거 뭐 쓰겠지?? ItemImgService 에서 이미지 수정할 때 사용하는 거였다.
         this.oriImgName = oriImgName;
         this.imgName = imgName;
         this.imgUrl = imgUrl;
