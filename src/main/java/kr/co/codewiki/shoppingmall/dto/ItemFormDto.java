@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+// 여기에는 상품이랑, 상품 이미지가 다 있다.
 @Getter @Setter
 public class ItemFormDto {
 

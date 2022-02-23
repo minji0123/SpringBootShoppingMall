@@ -11,6 +11,7 @@ UUID: Universally Unique Identifier
 실제로는 중복될 가능성이 거의 없어서 그냥 파일 이름으로 사용하면 됨
  */
 
+// 파일을 처리하는 파일 서비스!
 @Service
 @Log
 public class FileService {
