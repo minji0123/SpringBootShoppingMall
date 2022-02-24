@@ -35,16 +35,18 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
+		<!-- Querydsl  -->
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
-			<version>4.3.1</version>
+<!--			<version>4.3.1</version>-->
 		</dependency>
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-apt</artifactId>
-			<version>4.3.1</version>
+<!--			<version>4.3.1</version>-->
 		</dependency>
+
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -119,6 +121,8 @@
 				</configuration>
 			</plugin>
 
+			<!--Qdomain-->
+			<!--	Querydsl 을 통해서 쿼리를 생성할 때 Qdomain 객체를 사용할 수 있음	-->
 			<plugin>
 				<groupId>com.mysema.maven</groupId>
 				<artifactId>apt-maven-plugin</artifactId>
@@ -135,7 +139,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 
 
 		</plugins>
