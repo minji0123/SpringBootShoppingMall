@@ -1,6 +1,7 @@
 package kr.co.codewiki.shoppingmall.repository;
 
 import kr.co.codewiki.shoppingmall.dto.ItemSearchDto;
+import kr.co.codewiki.shoppingmall.dto.MainItemDto;
 import kr.co.codewiki.shoppingmall.entity.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +16,7 @@ import org.springframework.data.domain.Pageable;
 // 1. 사용자 정의 인터페이스 작성
 public interface ItemRepositoryCustom {
     Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable);
+
+    Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable);
+    // 메인 페이지에 보여줄 상품 리스트
 }
