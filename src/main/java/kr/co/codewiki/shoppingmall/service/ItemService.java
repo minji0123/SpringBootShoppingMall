@@ -5,6 +5,7 @@ package kr.co.codewiki.shoppingmall.service;
 import kr.co.codewiki.shoppingmall.dto.ItemFormDto;
 import kr.co.codewiki.shoppingmall.dto.ItemImgDto;
 import kr.co.codewiki.shoppingmall.dto.ItemSearchDto;
+import kr.co.codewiki.shoppingmall.dto.MainItemDto;
 import kr.co.codewiki.shoppingmall.entity.Item;
 import kr.co.codewiki.shoppingmall.entity.ItemImg;
 import kr.co.codewiki.shoppingmall.repository.ItemImgRepository;
@@ -104,5 +105,11 @@ public class ItemService {
     @Transactional(readOnly = true) // 트랜젝션을 readOnly 로 설정할 경우, JPA 가 변경감지(더티체킹)를 수행하지 않아서 성능 향상됨 _데이터 수정이 일어나지 않기 때문에
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+    // 메인 페이지에 보여줄 상품 데이테 조회
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable){
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 }

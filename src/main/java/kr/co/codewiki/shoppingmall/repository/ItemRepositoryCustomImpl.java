@@ -6,8 +6,11 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.codewiki.shoppingmall.constant.ItemSellStatus;
 import kr.co.codewiki.shoppingmall.dto.ItemSearchDto;
+import kr.co.codewiki.shoppingmall.dto.MainItemDto;
+import kr.co.codewiki.shoppingmall.dto.QMainItemDto;
 import kr.co.codewiki.shoppingmall.entity.Item;
 import kr.co.codewiki.shoppingmall.entity.QItem;
+import kr.co.codewiki.shoppingmall.entity.QItemImg;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -74,7 +77,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
     }
 
 
-    // queryFactory 로 쿼리 생성
+    // queryFactory 로 쿼리 동적 생성
     @Override
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
 
@@ -95,6 +98,40 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return new PageImpl<>(content, pageable, total); // 조회한 데이터를 Page 클래스의 구현체인 PageImpl 객체로 반환 (?)
     }
 
+    // item like 검색 (밑에서 쓰려구)
+    private BooleanExpression itemNmLike(String searchQuery){
+        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
+    }
+
+    // queryFactory 로 쿼리 동적 생성
+    @Override
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        QueryResults<MainItemDto> results = queryFactory
+                .select(
+                        new QMainItemDto( // 원래는 entity 로 변환해줘야 하는데, mainitemdto 의 어노테이션 (QueryProjection)덕분에 dto 로 그냥 사용
+                                item.id,
+                                item.itemNm,
+                                item.itemDetail,
+                                itemImg.imgUrl,
+                                item.price)
+                )
+                .from(itemImg)
+                .join(itemImg.item, item) // 내부 조인
+                .where(itemImg.repimgYn.eq("Y")) // 대표 상품인 경우에는 Y
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<MainItemDto> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
+    }
+
     /*
     * Querydsl 결과 조회 메소드
     * 1. QueryResults<T> fetchResults(): 조회 대상 리스트 및 전체 개수 return (QueryResults)_위에서 사용함
@@ -103,5 +140,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
     * 4. T fetchFirst(): 조회 대상이 1건 or 1건 이상이면 1건만 반환
     * 5. long fetchCount(): 해당 데이터 전체 개수 반환, count 쿼리 실행
     * */
+
+
 
 }
