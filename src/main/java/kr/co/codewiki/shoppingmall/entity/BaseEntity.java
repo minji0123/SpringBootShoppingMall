@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
+// 등록한사람, 수정한사람만 있는 entity + 상속받은 등록일 수정일 entity 도 있음
 @EntityListeners(value = {AuditingEntityListener.class})
 @MappedSuperclass
 @Getter
