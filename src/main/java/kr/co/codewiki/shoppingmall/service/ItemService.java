@@ -54,8 +54,8 @@ public class ItemService {
     }
 
     // 상품 수정하기를 위한 service
-    // 상품이랑, 상품이미지의 entity -> dto 로
-    @Transactional(readOnly = true) // 트랜젝션을 readOnly 로 설정할 경우, JPA 가 변경감지(더티체킹)를 수행하지 않아서 성능 향상됨
+    // 상품이랑, 상품이미지의 entity -> dto 로 바꾸기만 하는 service
+    @Transactional(readOnly = true) // 트랜젝션을 readOnly 로 설정할 경우, JPA 가 변경감지(더티체킹)를 수행하지 않아서 성능 향상됨_데이터 수정이 일어나지 않기 때문에 (수정은 밑에서 함)
     public ItemFormDto getItemDtl(Long itemId){
 
         List<ItemImg> itemImgList = itemImgRepository.findByItemIdOrderByIdAsc(itemId);
