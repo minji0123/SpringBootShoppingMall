@@ -5,9 +5,11 @@ import kr.co.codewiki.shoppingmall.dto.ItemSearchDto;
 import kr.co.codewiki.shoppingmall.entity.Item;
 import kr.co.codewiki.shoppingmall.service.ItemService;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequiredArgsConstructor
@@ -128,12 +132,16 @@ public class ItemController {
        return "item/itemMng"; // 조회한 상품 데이터 전달받는 페이지
     }
 
-//    @GetMapping(value = "/item/{itemId}")
-//    public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
-//        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
-//        model.addAttribute("item", itemFormDto);
-//        return "item/itemDtl";
-//    }
+    // 상품 상세 get 페이지
+    @GetMapping(value = "/item/{itemId}")
+    public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
 
+        // getItemDtl: service 에 있는 메소드. 상품이랑, 상품이미지의 entity -> dto 로 바꾸기만 하는 service
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+
+        model.addAttribute("item", itemFormDto);
+
+        return "item/itemDtl";
+    }
 
 }
