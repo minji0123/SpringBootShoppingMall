@@ -56,4 +56,6 @@ public class Item extends BaseEntity{
     데이터 변경 포인트를 여기로 지정할 수 있움(데이터 수정 변경 여기서만 한다는 뜻)
      */
 
+    
+
 }
