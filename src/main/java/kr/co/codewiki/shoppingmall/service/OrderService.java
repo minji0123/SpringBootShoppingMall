@@ -1,17 +1,17 @@
 package kr.co.codewiki.shoppingmall.service;
 
-import kr.co.codewiki.shoppingmall.dto.OrderDto;
+import kr.co.codewiki.shoppingmall.dto.OrderDto; 
 import kr.co.codewiki.shoppingmall.dto.OrderHistDto;
 import kr.co.codewiki.shoppingmall.dto.OrderItemDto;
-import kr.co.codewiki.shoppingmall.entity.*;
+import kr.co.codewiki.shoppingmall.entity.*; 
 import kr.co.codewiki.shoppingmall.repository.ItemImgRepository;
 import kr.co.codewiki.shoppingmall.repository.ItemRepository;
 import kr.co.codewiki.shoppingmall.repository.MemberRepository;
 import kr.co.codewiki.shoppingmall.repository.OrderRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor; 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Pageable; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +34,7 @@ public class OrderService {
     private final ItemImgRepository itemImgRepository;
 
 
-
-    // 주문을 위한 로직
+    // 주문을 위한 로직 
     public Long order(OrderDto orderDto, String email){
 
         Item item = itemRepository.findById(orderDto.getItemId()) // 주문할 상품을 조회
@@ -84,8 +83,5 @@ public class OrderService {
         }
 
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
-    }
-
-
-
+    } 
 }

@@ -2,6 +2,7 @@ package kr.co.codewiki.shoppingmall.entity;
 
 import kr.co.codewiki.shoppingmall.constant.ItemSellStatus;
 import kr.co.codewiki.shoppingmall.dto.ItemFormDto;
+import kr.co.codewiki.shoppingmall.exception.OutOfStockException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -51,16 +52,29 @@ public class Item extends BaseEntity{
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemSellStatus = itemFormDto.getItemSellStatus();
     }
-    /*
-<<<<<<< Updated upstream
+    /* 
     엔티티 클래스에 비즈니스 로직을 추가하면 객체지향적으로 코딩을 할 수 있고, 코드를 재활용 할 수도 있다.
-    데이터 변경 포인트를 여기로 지정할 수 있움(데이터 수정 변경 여기서만 한다는 뜻)
-=======
+    데이터 변경 포인트를 여기로 지정할 수 있움(데이터 수정 변경 여기서만 한다는 뜻) 
     엔티티 클래스에 비즈니스 로직(데이터 처리) 을 추가하면
     1. 객체지향적으로 코딩을 할 수 있고,
     2. 코드를 재활용 할 수도 있다.
-    3. 데이터 변경 포인트를 여기로 지정할 수 있움(데이터 수정 변경 여기서만 한다는 뜻)
->>>>>>> Stashed changes
+    3. 데이터 변경 포인트를 여기로 지정할 수 있움(데이터 수정 변경 여기서만 한다는 뜻) 
      */
+
+    // 상품 주문 -> 상품 재고 감소 로직 생성
+    public void removeStock(int stockNumber){
+
+        int restStock = this.stockNumber - stockNumber; // stockNumber: 상품의 재고 수량 restStock: 주문 후 남은 재고 수량
+
+        if(restStock<0){ // 상품 재고가 주문 수량보다 작을 경우, 재고 부족 예외 발생
+            throw new OutOfStockException("상품의 재고가 부족 합니다. (현재 재고 수량: " + this.stockNumber + ")");
+        }
+        this.stockNumber = restStock; // 주문 후 남은 재고 수량 = 상품의 현재 재고 값
+    }
+
+//    public void addStock(int stockNumber){
+//        this.stockNumber += stockNumber;
+//    }
+
 
 }

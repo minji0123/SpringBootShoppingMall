@@ -1,6 +1,6 @@
 package kr.co.codewiki.shoppingmall.controller;
 
-import kr.co.codewiki.shoppingmall.dto.OrderDto;
+import kr.co.codewiki.shoppingmall.dto.OrderDto; 
 import kr.co.codewiki.shoppingmall.dto.OrderHistDto;
 import kr.co.codewiki.shoppingmall.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.validation.FieldError; 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
+import java.util.List; 
+import java.util.Optional; 
 
 // 주문 관련 요청들을 처리
 // 비동기 방식 사용_상품 주문에서 웹 페이지의 새로 고침 없이 서버에서 주문을 요청하기 위해서
@@ -27,8 +25,8 @@ import java.util.Optional;
 public class OrderController {
 
     private final OrderService orderService;
-
-    // 상품 구매 post (REST Api)
+ 
+    // 상품 구매 post (REST Api) 
     @PostMapping(value = "/order") // @ResponseBody, @RequestBody: 비동기 처리를 할 때 사용
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, Principal principal){
         // @ResponseBody: Http 요청의 본문 body 에 담긴 내용을 자바 객체로 전달
@@ -61,7 +59,7 @@ public class OrderController {
 
         return new ResponseEntity<Long>(orderId, HttpStatus.OK); // http 응답 코드를 반환!
     }
-
+ 
     // 구매이력 조회 get 페이지
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
@@ -79,6 +77,5 @@ public class OrderController {
         model.addAttribute("maxPage", 5);
 
         return "order/orderHist";
-    }
-
+    } 
 }
