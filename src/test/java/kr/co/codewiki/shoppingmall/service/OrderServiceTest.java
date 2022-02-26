@@ -1,6 +1,7 @@
 package kr.co.codewiki.shoppingmall.service;
 
 import kr.co.codewiki.shoppingmall.constant.ItemSellStatus;
+import kr.co.codewiki.shoppingmall.constant.OrderStatus;
 import kr.co.codewiki.shoppingmall.dto.OrderDto;
 import kr.co.codewiki.shoppingmall.entity.Item;
 import kr.co.codewiki.shoppingmall.entity.Member;
@@ -77,6 +78,26 @@ class OrderServiceTest {
         int totalPrice = orderDto.getCount()*item.getPrice(); // 총 가격
 
         assertEquals(totalPrice, order.getTotalPrice()); // 총 가격 == db 에 저장된 상품 가격 이면은 성공!
+    }
+
+
+    @Test
+    @DisplayName("주문 취소 테스트")
+    public void cancelOrder(){
+        Item item = saveItem();
+        Member member = saveMember();
+
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCount(10); // 10개 주문 넣음
+        orderDto.setItemId(item.getId());
+        Long orderId = orderService.order(orderDto, member.getEmail());
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        orderService.cancelOrder(orderId); // 10개 주문 취소
+
+        assertEquals(OrderStatus.CANCEL, order.getOrderStatus()); // cancel == 주문상태
+        assertEquals(100, item.getStockNumber()); // 처음개수 == 주문넣다뺐다 한 결과값
     }
 
 }

@@ -56,7 +56,9 @@ public class OrderItem extends BaseEntity{ // BaseEntity: 등록한사람, 수�
         return orderPrice*count; // 총 가격: 주문가격*주문수량
     }
 
-//    public void cancel() {
-//        this.getItem().addStock(count);
-//    }
+    // Item 클래스에서 주문 취소 시 주문 수량을 상품의 재고에 더해주는 로직
+    // == 주문 취소 시 주문 수량만큼 상품의 재고를 증가 (item 의 메소드 호출)
+    public void cancel() {
+        this.getItem().addStock(count);
+    }
 }

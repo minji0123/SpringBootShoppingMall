@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
@@ -83,5 +84,30 @@ public class OrderService {
         }
 
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
-    } 
+    }
+
+
+    // DB 에 있는 email 과 주문자 email 대조함
+    @Transactional(readOnly = true)
+    public boolean validateOrder(Long orderId, String email){
+        Member curMember = memberRepository.findByEmail(email); // 유저 이메일 받아옴
+        Order order = orderRepository.findById(orderId) // 주문 데이터 받아오고
+                .orElseThrow(EntityNotFoundException::new);
+        Member savedMember = order.getMember(); // 위의 주문을 한 유저의 정보를 받아옴
+
+        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){
+            return false; // 그 둘이 같지 않으면은 false
+        }
+
+        return true; // 같으면 true
+    }
+
+    // 주문 취소하는 로직 구현 service
+    public void cancelOrder(Long orderId){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+        order.cancelOrder();
+    }
+
+
 }
