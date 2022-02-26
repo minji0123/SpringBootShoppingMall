@@ -1,15 +1,17 @@
 package kr.co.codewiki.shoppingmall.service;
 
-import kr.co.codewiki.shoppingmall.dto.OrderDto;
-import kr.co.codewiki.shoppingmall.entity.Item;
-import kr.co.codewiki.shoppingmall.entity.Member;
-import kr.co.codewiki.shoppingmall.entity.Order;
-import kr.co.codewiki.shoppingmall.entity.OrderItem;
+import kr.co.codewiki.shoppingmall.dto.OrderDto; 
+import kr.co.codewiki.shoppingmall.dto.OrderHistDto;
+import kr.co.codewiki.shoppingmall.dto.OrderItemDto;
+import kr.co.codewiki.shoppingmall.entity.*; 
 import kr.co.codewiki.shoppingmall.repository.ItemImgRepository;
 import kr.co.codewiki.shoppingmall.repository.ItemRepository;
 import kr.co.codewiki.shoppingmall.repository.MemberRepository;
 import kr.co.codewiki.shoppingmall.repository.OrderRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor; 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,8 @@ public class OrderService {
 
     private final ItemImgRepository itemImgRepository;
 
+
+    // 주문을 위한 로직 
     public Long order(OrderDto orderDto, String email){
 
         Item item = itemRepository.findById(orderDto.getItemId()) // 주문할 상품을 조회
@@ -52,4 +56,32 @@ public class OrderService {
         return order.getId(); // 생성한 주문 엔티티의 id 값 리턴!
     }
 
+
+    // 주문 목록을 조회하기 위한 로직
+    @Transactional(readOnly = true)
+    public Page<OrderHistDto> getOrderList(String email, Pageable pageable) {
+
+        List<Order> orders = orderRepository.findOrders(email, pageable); // 주문 목록을 조회
+        Long totalCount = orderRepository.countOrder(email); // 주문 총 개수
+
+        List<OrderHistDto> orderHistDtos = new ArrayList<>();
+
+        for (Order order : orders) {
+            OrderHistDto orderHistDto = new OrderHistDto(order);
+            List<OrderItem> orderItems = order.getOrderItems();
+
+            for (OrderItem orderItem : orderItems) { // entity -> dto
+
+                ItemImg itemImg = itemImgRepository.findByItemIdAndRepimgYn
+                        (orderItem.getItem().getId(), "Y"); // 대표상품인지 보는거 (상품 이력 페이지에 출력해야 하니까)
+                OrderItemDto orderItemDto =
+                        new OrderItemDto(orderItem, itemImg.getImgUrl()); // entity-> dto
+                orderHistDto.addOrderItemDto(orderItemDto);
+            }
+
+            orderHistDtos.add(orderHistDto);
+        }
+
+        return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
+    } 
 }

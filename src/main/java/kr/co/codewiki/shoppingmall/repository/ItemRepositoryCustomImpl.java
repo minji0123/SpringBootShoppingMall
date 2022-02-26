@@ -24,7 +24,7 @@ import java.util.List;
  * 사용자 정의 repository 는 총 3단계임
  * 1. 사용자 정의 인터페이스 작성
  * 2. 사용자 정의 인터페이스 구현 ***
- * 3. Spring Data Jpa repository 에서 사용자 정의 인터페이스 상속
+ * 3. Spring Data Jpa repository 에서 사용자 정의 인터페이스 상속 (ItemRepository)
  * */
 
 //2. 사용자 정의 인터페이스 구현 (클래스 뒤에 Impl 을 꼭 붙여야 한다.)
