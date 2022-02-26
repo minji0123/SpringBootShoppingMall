@@ -15,7 +15,7 @@
 
             calculateToalPrice();
 
-            $("#count").change( function(){
+            $("#count").change(function(){
                 calculateToalPrice();
             });
         });
@@ -41,11 +41,11 @@
             };
 
             var param = JSON.stringify(paramData); // JSON 으로 데이터 보냄
-
+            // JSON 으로 데이터 보냄
             $.ajax({
                 url      : url,
                 type     : "POST",
-                contentType : "application/json", // JSON 으로 데이터 보냄
+                contentType : "application/json",
                 data     : param,
                 beforeSend : function(xhr){
                     /* 데이터를 전송하기 전에 헤더에 csrf 값을 설정 (POST 방식 토큰) */
