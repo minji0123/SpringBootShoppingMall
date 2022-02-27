@@ -109,5 +109,25 @@ public class OrderService {
         order.cancelOrder();
     }
 
+    // 장바구니에서 주문할 상품 데이터를 전달받아서 주문 생성
+    public Long orders(List<OrderDto> orderDtoList, String email){
+
+        Member member = memberRepository.findByEmail(email);
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        // 주문할 상품 리스트
+        for (OrderDto orderDto : orderDtoList) {
+            Item item = itemRepository.findById(orderDto.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
+            orderItemList.add(orderItem); // 밑에 담아줌
+        }
+
+        Order order = Order.createOrder(member, orderItemList); // 회원이랑 주문할 상품 리스트들을 주문에 담음
+        orderRepository.save(order);
+
+        return order.getId();
+    }
 
 }
