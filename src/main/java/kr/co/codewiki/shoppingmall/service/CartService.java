@@ -1,5 +1,6 @@
 package kr.co.codewiki.shoppingmall.service;
 
+import kr.co.codewiki.shoppingmall.dto.CartDetailDto;
 import kr.co.codewiki.shoppingmall.dto.CartItemDto;
 import kr.co.codewiki.shoppingmall.entity.Cart;
 import kr.co.codewiki.shoppingmall.entity.CartItem;
@@ -12,8 +13,11 @@ import kr.co.codewiki.shoppingmall.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +56,58 @@ public class CartService {
             cartItemRepository.save(cartItem);
             return cartItem.getId();
         }
+    }
+
+    // 이메일을 이용하여 카트 리스트를 조회합니다.
+    @Transactional(readOnly = true)
+    public List<CartDetailDto> getCartList(String email){
+
+        List<CartDetailDto> cartDetailDtoList = new ArrayList<>();
+
+        Member member = memberRepository.findByEmail(email);
+        Cart cart = cartRepository.findByMemberId(member.getId());
+
+        if(cart == null){ // 위에서 유저 카트 조회해서, 없으면은 그냥 반환하고
+            return cartDetailDtoList;
+        }
+
+        cartDetailDtoList = cartItemRepository.findCartDetailDtoList(cart.getId());
+        return cartDetailDtoList; // 카트 있으면은 cartItemRepository 의 JPQL 쿼리로 걸러진 아이템들을 담영서 반환
+    }
+
+    // 카트 아이템이 유효한지 확인
+    // 회원 검증
+    @Transactional(readOnly = true)
+    public boolean validateCartItem(Long cartItemId, String email){
+
+        Member curMember = memberRepository.findByEmail(email); // 현재 로그인한 회원 조회
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(EntityNotFoundException::new); // 장바구니의 상품을 조회해서
+
+        Member savedMember = cartItem.getCart().getMember(); // 그 상품을 저장한 회원 조회
+
+        if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())){ // 로그인한 회원 == 장바구니에 상품을 저장한 회원
+            return false;
+        }
+        return true;
+    }
+
+    // 장바구 상품의 수량을 업데이트함
+    public void updateCartItemCount(Long cartItemId, int count){
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(EntityNotFoundException::new);// 장바구니의 상품을 조회해서
+
+        cartItem.updateCount(count); // 장바구니 상품 개수 ++
+    }
+
+    // 장바구니 아이템 제거
+    public void deleteCartItem(Long cartItemId) {
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(EntityNotFoundException::new);// 장바구니의 상품을 조회해서
+
+        cartItemRepository.delete(cartItem); // 장바구니 상품 제거
     }
 }
