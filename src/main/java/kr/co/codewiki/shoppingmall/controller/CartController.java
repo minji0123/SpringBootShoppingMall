@@ -2,6 +2,7 @@ package kr.co.codewiki.shoppingmall.controller;
 
 import kr.co.codewiki.shoppingmall.dto.CartDetailDto;
 import kr.co.codewiki.shoppingmall.dto.CartItemDto;
+import kr.co.codewiki.shoppingmall.dto.CartOrderDto;
 import kr.co.codewiki.shoppingmall.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -85,4 +86,24 @@ public class CartController {
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK); // 응답 리턴
     }
 
+    // 장바구니 상품 수량 반영 (주문하면은 빼야됨) post
+    @PostMapping(value = "/cart/orders")
+    public @ResponseBody ResponseEntity orderCartItem(@RequestBody CartOrderDto cartOrderDto, Principal principal){
+        // orderDto 에 여러 Order 들이 있다.
+        // 이 많은 주문들을 반영해야 하려고 새로 메소드를 만들었다. (patch 는 id 값을 받아와서 수정을 해준거고)
+        List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
+
+        if(cartOrderDtoList == null || cartOrderDtoList.size() == 0){
+            return new ResponseEntity<String>("주문할 상품을 선택해주세요", HttpStatus.FORBIDDEN);
+        }
+
+        for (CartOrderDto cartOrder : cartOrderDtoList) {
+            if(!cartService.validateCartItem(cartOrder.getCartItemId(), principal.getName())){
+                return new ResponseEntity<String>("주문 권한이 없습니다.", HttpStatus.FORBIDDEN);
+            }
+        }
+
+        Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName()); // 상품 주문 + 장바구니에서 주문한거 제거
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
 }

@@ -2,6 +2,8 @@ package kr.co.codewiki.shoppingmall.service;
 
 import kr.co.codewiki.shoppingmall.dto.CartDetailDto;
 import kr.co.codewiki.shoppingmall.dto.CartItemDto;
+import kr.co.codewiki.shoppingmall.dto.CartOrderDto;
+import kr.co.codewiki.shoppingmall.dto.OrderDto;
 import kr.co.codewiki.shoppingmall.entity.Cart;
 import kr.co.codewiki.shoppingmall.entity.CartItem;
 import kr.co.codewiki.shoppingmall.entity.Item;
@@ -109,5 +111,34 @@ public class CartService {
                 .orElseThrow(EntityNotFoundException::new);// 장바구니의 상품을 조회해서
 
         cartItemRepository.delete(cartItem); // 장바구니 상품 제거
+    }
+
+
+    // 상품 주문 + 장바구니에서 주문한거 제거
+    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        // 주문한 상품을 orderDtoList 에 담아줌
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository
+                    .findById(cartOrderDto.getCartItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            OrderDto orderDto = new OrderDto();
+            orderDto.setItemId(cartItem.getItem().getId());
+            orderDto.setCount(cartItem.getCount());
+            orderDtoList.add(orderDto);
+            // 여러 개의 상품을 하나의 주문에 담아야 함
+        }
+
+        // 주문한 상품은 장바구니에서 제거함
+        Long orderId = orderService.orders(orderDtoList, email);
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository
+                    .findById(cartOrderDto.getCartItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+            cartItemRepository.delete(cartItem);
+        }
+        return orderId;
     }
 }
