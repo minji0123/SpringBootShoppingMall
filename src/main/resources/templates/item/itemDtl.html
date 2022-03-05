@@ -116,36 +116,16 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
-        .mgb-15{
-            margin-bottom:15px;
-        }
-        .mgt-30{
-            margin-top:30px;
-        }
-        .mgt-50{
-            margin-top:50px;
-        }
-        .repImgDiv{
-            margin-right:15px;
-            height:auto;
-            width:50%;
-        }
-        .repImg{
-            width:80%;
-            height:400px;
-        }
-        .wd50{
-            height:auto;
-            width:50%;
-        }
+
     </style>
 </th:block>
 
-<div layout:fragment="content" style="margin-left:25%;margin-right:25%">
+<div layout:fragment="content" >
 
+    <div class="container container-mt">
     <input type="hidden" id="itemId" th:value="${item.id}">
 
-    <div class="d-flex">
+    <div class="d-flex detail-mt-md">
         <div class="repImgDiv">
             <img th:src="${item.itemImgDtoList[0].imgUrl}" class = "rounded repImg" th:alt="${item.itemNm}">
         </div>
@@ -187,18 +167,12 @@
         </div>
     </div>
 
-    <div class="jumbotron jumbotron-fluid mgt-30">
-        <div class="container">
-            <h4 class="display-5">상품 상세 설명</h4>
-            <hr class="my-4">
-            <p class="lead" th:text="${item.itemDetail}"></p>
-        </div>
-    </div>
-
     <!-- 등록한 상품 이미지를 반복문으로 출력 -->
     <div th:each="itemImg : ${item.itemImgDtoList}" class="text-center">
         <img th:if="${not #strings.isEmpty(itemImg.imgUrl)}" th:src="${itemImg.imgUrl}" class="rounded mgb-15" width="800">
     </div>
+    </div>
+
 
 </div>
 

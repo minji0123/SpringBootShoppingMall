@@ -2,12 +2,15 @@ html {
     position: relative;
     min-height: 100%;
     margin: 0;
+
 }
 body {
     min-height: 100%;
 }
+a{
+    text-decoration: none;
+}
 .footer {
-    position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
@@ -20,4 +23,35 @@ body {
     margin-top: 50px;
     margin-left: 200px;
     margin-right: 200px;
+}
+
+.jumbotron{
+    background-image: url('/img/main.jpg');
+    color:white;
+    height: 500px;
+}
+.a-color{
+    background-color: #5A6268 !important;
+    border-color: #5A6268 !important;
+}
+.display-4{
+    font-size: 80px;
+    font-weight: 600;
+}
+.lead, p{
+    font-weight: 600;
+    font-size: larger;
+}
+.container-mt{
+    margin-top: 50px;
+}
+.table-mb{
+    margin-bottom:70px;
+}
+.detail-mt-md{
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+.img-size{
+    width: 250px;
 }

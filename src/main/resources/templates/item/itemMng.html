@@ -40,10 +40,11 @@
 
 <div layout:fragment="content">
 
+<div class="container container-mt">
   <form th:action="@{'/admin/items/' + ${items.number}}" role="form" method="get" th:object="${items}">
 
     <!-- 조회한 상품 데이터 view -->
-    <table class="table">
+    <table class="table table-mb">
       <thead>
       <tr>
         <td>상품아이디</td>
@@ -83,7 +84,7 @@
         </li>
 
         <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">  <!-- active 클래스 추가함. 왜냐면은 현재 페이지 일 때 색 넣어줄려고  -->
-          <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
+          <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link a-color">[[${page}]]</a>
         </li>
 
         <li class="page-item" th:classappend="${items.last}?'disabled'">  <!-- 마지막 페이지면은 '다음 페이지 보여주기 버튼' 비활성화 -->
@@ -113,9 +114,12 @@
         <option value="createdBy">등록자</option>
       </select>
       <input th:field="*{searchQuery}" type="text" class="form-control" placeholder="검색어를 입력해주세요">
-      <button id="searchBtn" type="submit" class="btn btn-primary">검색</button>
+      <button id="searchBtn" type="submit" class="btn btn-secondary">검색</button>
     </div>
   </form>
+</div>
+
+
 
 </div>
 

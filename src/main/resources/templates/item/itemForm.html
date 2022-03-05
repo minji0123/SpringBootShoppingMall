@@ -55,12 +55,14 @@
 
 <div layout:fragment="content">
 
+
+    <div class="container container-mt">
     <form role="form" method="post" enctype="multipart/form-data" th:object="${itemFormDto}">
 
         <p class="h2">
             상품 등록
         </p>
-
+        <div style="margin-bottom: 25px;"></div>
         <input type="hidden" th:field="*{id}">
 
         <div class="form-group">
@@ -127,15 +129,18 @@
 
         <!-- 상품 아이디가 없는 경우(상품을 처음 등록하는 경우) 저장 로직을 호출하는 버튼을 보여줌 -->
         <div th:if="${#strings.isEmpty(itemFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{/admin/item/new}" type="submit" class="btn btn-primary">저장</button>
+            <button th:formaction="@{/admin/item/new}" type="submit" class="btn btn-secondary">저장</button>
         </div>
         <!-- 상품 아이디가 있는 경우 수정 로직을 호출하는 버튼을 보여줌 -->
         <div th:unless="${#strings.isEmpty(itemFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/admin/item/' + ${itemFormDto.id} }" type="submit" class="btn btn-primary">수정</button>
+            <button th:formaction="@{'/admin/item/' + ${itemFormDto.id} }" type="submit" class="btn btn-secondary">수정</button>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     </form>
+    </div>  <!-- container -->
+
+
 
 </div>
 
