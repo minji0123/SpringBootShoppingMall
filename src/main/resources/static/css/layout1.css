@@ -6,6 +6,7 @@ html {
 }
 body {
     min-height: 100%;
+    font-family: 'Gowun Dodum', sans-serif;
 }
 a{
     text-decoration: none;
@@ -37,6 +38,9 @@ a{
 .display-4{
     font-size: 80px;
     font-weight: 600;
+    font-family: 'Do Hyeon', sans-serif;
+    letter-spacing: 7px;
+
 }
 .lead, p{
     font-weight: 600;
